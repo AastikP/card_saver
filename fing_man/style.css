@@ -45,6 +45,32 @@
         margin-top: -36px;
     }
 
+    .pass 
+    {
+        width: 240px;
+        position: relative;
+        font-family: "Open Sans", sans-serif;
+        letter-spacing: 0.5px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-align: left;
+    }
+
+    .pass_input
+    {
+        width: 250px;
+        position: relative;
+        border-radius: 20px;
+        border: solid 1px black;
+        background-color: #f0f0f0;
+        height: 40px;
+    }
+
+    .pass_input_div
+    {    
+        margin-top: -36px;
+    }
+
     .reds 
     {
         width: 100%;
@@ -52,8 +78,8 @@
         flex-direction: row;
         justify-content: center;
         align-items: center;
-        gap: 50px;
-        top:-20px;
+        gap: 90px;
+        top:-60px;
         position: relative;
     }
 
@@ -75,11 +101,23 @@
         gap:40px;
     }
 
+    .login_but
+    {
+        border-radius: 30px;
+        width: 180px;
+        font-family: "Alata", sans-serif;
+        font-size: 1.3rem;
+        font-weight: 400;
+        text-align: center;
+        vertical-align: middle;
+        height: 50px;
+    }
+
     a 
     {
         text-decoration: none;
         -webkit-tap-highlight-color: rgba(255, 255, 255, 0) !important;
         -webkit-focus-ring-color: rgba(255, 255, 255, 0) !important;
-        outline: none !important;        
+        outline: none !important;
     }
 }
