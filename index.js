@@ -1,12 +1,14 @@
-function test()
-{
-  document.getElementById("fing_ani").play();
-}
-
 const express = require('express');
-const { generateRegistrationOptions, verifyRegistrationResponse, generateAuthenticationOptions, verifyAuthenticationResponse } = require('@simplewebauthn/server');
+const cors = require('cors'); // Import CORS middleware
+const { 
+  generateRegistrationOptions, 
+  verifyRegistrationResponse, 
+  generateAuthenticationOptions, 
+  verifyAuthenticationResponse 
+} = require('@simplewebauthn/server');
 
 const app = express();
+app.use(cors()); // Enable CORS for all origins
 app.use(express.json());
 
 // In-memory database for demo purposes
@@ -107,5 +109,57 @@ app.post('/verify-authentication', (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+// Registration function
+async function startRegistration() {
+  const response = await fetch('https://card-saver-blue.vercel.app/generate-registration-options', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username: "exampleUser" })
+  });
+  const options = await response.json();
+
+  const attResp = await SimpleWebAuthn.startRegistration(options);
+
+  const verificationResponse = await fetch('https://card-saver-blue.vercel.app/verify-registration', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username: "exampleUser", response: attResp })
+  });
+
+  const verificationJSON = await verificationResponse.json();
+  if (verificationJSON.verified) {
+    document.getElementById("fing_ani").play(); // Trigger animation on success
+    alert('Registration successful!');
+  } else {
+    alert('Registration failed.');
+  }
+}
+
+// Authentication function
+async function startAuthentication() {
+  const response = await fetch('https://card-saver-blue.vercel.app/generate-authentication-options', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username: "exampleUser" })
+  });
+  const options = await response.json();
+
+  const authResp = await SimpleWebAuthn.startAuthentication(options);
+
+  const verificationResponse = await fetch('https://card-saver-blue.vercel.app/verify-authentication', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username: "exampleUser", response: authResp })
+  });
+
+  const verificationJSON = await verificationResponse.json();
+  if (verificationJSON.verified) {
+    document.getElementById("fing_ani").play(); // Trigger animation on success
+    alert('Login successful!');
+  } else {
+    alert('Login failed.');
+  }
+}
 
 app.listen(3000, () => console.log('Server is running on port 3000'));
